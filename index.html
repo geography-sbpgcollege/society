@@ -40,7 +40,9 @@
   gtag('config', 'G-F0RNLR61VZ');
 </script>
     <title>MyGeography Society | Shri Baldeo P.G. College</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
@@ -60,7 +62,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            cursor: none; /* Hide default cursor for custom one */
         }
 
         body {
@@ -83,28 +84,7 @@
         }
 
         /* --- CUSTOM CURSOR --- */
-        .cursor-dot, .cursor-outline {
-            position: fixed;
-            top: 0; left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        .cursor-dot {
-            width: 8px; height: 8px;
-            background-color: var(--primary);
-        }
-        .cursor-outline {
-            width: 40px; height: 40px;
-            border: 1px solid var(--primary);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        /* Cursor Hover State */
-        body.hovering .cursor-outline {
-            width: 60px; height: 60px;
-            background-color: rgba(74, 222, 128, 0.1);
-            border-color: transparent;
+        
         }
 
         /* --- SCROLLBAR --- */
@@ -159,7 +139,7 @@
         .nav-links a:hover { color: var(--primary); }
 
         /* --- BURGER MENU --- */
-        .burger { display: none; cursor: pointer; z-index: 1001; }
+        .burger { display: none; z-index: 1001; }
         .burger div { width: 25px; height: 3px; background-color: var(--text-main); margin: 5px; transition: var(--transition); }
         .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); background: var(--primary); }
         .toggle .line2 { opacity: 0; }
@@ -370,8 +350,7 @@
 </head>
 <body>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    
 
     <nav class="navbar">
         <div class="logo">MyGeography <span>Society</span></div>
