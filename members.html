@@ -192,13 +192,6 @@
 
     <script>
         // Cursor
-        const dot = document.querySelector('.cursor-dot');
-        const outline = document.querySelector('.cursor-outline');
-        window.addEventListener('mousemove', (e) => {
-            const x = e.clientX, y = e.clientY;
-            dot.style.left = `${x}px`; dot.style.top = `${y}px`;
-            outline.animate({ left: `${x}px`, top: `${y}px` }, { duration: 500, fill: "forwards" });
-        });
         // Menu
         const burger = document.querySelector('.burger');
         const nav = document.querySelector('.nav-links');
