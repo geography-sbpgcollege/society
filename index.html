@@ -9,13 +9,14 @@
         /* --- CSS VARIABLES & RESET --- */
         :root {
             --bg-dark: #0a0e17;
-            --bg-panel: rgba(255, 255, 255, 0.05);
+            --bg-panel: rgba(255, 255, 255, 0.03);
             --primary: #4ade80; /* Neon Green */
             --secondary: #3b82f6; /* Ocean Blue */
             --accent: #f59e0b; /* Topography Orange */
+            --purple: #bc13fe; /* Data Purple */
             --text-main: #f0fdf4;
             --text-muted: #94a3b8;
-            --glass: blur(12px) saturate(180%);
+            --glass: blur(16px) saturate(180%);
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
@@ -23,6 +24,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none; /* Hide default cursor for custom one */
         }
 
         body {
@@ -31,19 +33,53 @@
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
+            /* Animated Background Mesh */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(74, 222, 128, 0.1), transparent 25%);
+            background-attachment: fixed;
+            animation: bgPulse 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 10% 10%; }
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background-color: var(--primary);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid var(--primary);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        /* Cursor Hover State */
+        body.hovering .cursor-outline {
+            width: 60px; height: 60px;
+            background-color: rgba(74, 222, 128, 0.1);
+            border-color: transparent;
         }
 
         /* --- SCROLLBAR --- */
-        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--primary), var(--secondary)); border-radius: 5px; }
 
         /* --- NAVIGATION --- */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
@@ -52,7 +88,7 @@
             background: rgba(10, 14, 23, 0.7);
             backdrop-filter: var(--glass);
             -webkit-backdrop-filter: var(--glass);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
@@ -66,53 +102,29 @@
             align-items: center;
             gap: 10px;
         }
+        .logo span { color: var(--primary); text-shadow: 0 0 10px rgba(74, 222, 128, 0.5); }
 
-        .logo span { color: var(--primary); }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
-
+        .nav-links { display: flex; gap: 3rem; list-style: none; }
         .nav-links a {
             text-decoration: none;
             color: var(--text-main);
             font-weight: 500;
             position: relative;
             transition: color 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-
         .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--primary);
-            transition: width 0.3s ease;
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+            background-color: var(--primary); transition: width 0.3s ease;
         }
-
         .nav-links a:hover::after { width: 100%; }
         .nav-links a:hover { color: var(--primary); }
 
         /* --- BURGER MENU --- */
-        .burger {
-            display: none;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        .burger div {
-            width: 25px;
-            height: 3px;
-            background-color: var(--text-main);
-            margin: 5px;
-            transition: var(--transition);
-        }
-
-        /* Burger Toggle Animation */
+        .burger { display: none; cursor: pointer; z-index: 1001; }
+        .burger div { width: 25px; height: 3px; background-color: var(--text-main); margin: 5px; transition: var(--transition); }
         .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); background: var(--primary); }
         .toggle .line2 { opacity: 0; }
         .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); background: var(--primary); }
@@ -122,305 +134,218 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             position: relative;
             padding: 0 5%;
             overflow: hidden;
         }
-
+        /* Glow Effects */
         .hero::before {
-            content: '';
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--primary);
-            filter: blur(150px);
-            opacity: 0.2;
-            border-radius: 50%;
-            top: 20%;
-            left: -10%;
+            content: ''; position: absolute; width: 300px; height: 300px;
+            background: var(--primary); filter: blur(150px); opacity: 0.15;
+            border-radius: 50%; top: 20%; left: -10%;
         }
-
         .hero::after {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: var(--secondary);
-            filter: blur(150px);
-            opacity: 0.2;
-            border-radius: 50%;
-            bottom: 10%;
-            right: -10%;
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: var(--secondary); filter: blur(150px); opacity: 0.15;
+            border-radius: 50%; bottom: 10%; right: -10%;
         }
 
-        .hero-content {
-            z-index: 2;
-            max-width: 600px;
-        }
-
+        .hero-content { z-index: 2; max-width: 600px; }
+        
         .badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            letter-spacing: 1px;
+            display: inline-block; padding: 0.5rem 1rem;
+            background: rgba(59, 130, 246, 0.1); border: 1px solid var(--secondary);
+            color: var(--secondary); border-radius: 50px; font-size: 0.8rem;
+            font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
         }
 
         .hero h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+            font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;
             font-family: 'Space Grotesk', sans-serif;
         }
-
         .hero h1 span {
             background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        /* Typewriter Cursor */
+        .txt-type { border-right: 0.1em solid var(--primary); animation: blink 0.7s infinite; }
+        @keyframes blink { 0%,100%{border-color: transparent} 50%{border-color: var(--primary)} }
 
         .hero p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            border-left: 3px solid var(--accent);
-            padding-left: 1rem;
+            font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;
+            border-left: 3px solid var(--accent); padding-left: 1rem;
         }
 
         .btn {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--primary);
-            color: var(--bg-dark);
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 5px;
-            transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 2px solid var(--primary);
+            display: inline-block; padding: 1rem 2rem;
+            background: var(--primary); color: var(--bg-dark);
+            text-decoration: none; font-weight: 700; border-radius: 5px;
+            transition: var(--transition); text-transform: uppercase;
+            letter-spacing: 1px; border: 2px solid var(--primary);
+            position: relative; overflow: hidden; z-index: 1;
         }
-
+        .btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s; z-index: -1;
+        }
+        .btn:hover::before { left: 100%; }
         .btn:hover {
-            background: transparent;
-            color: var(--primary);
+            background: transparent; color: var(--primary);
             box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
         }
 
-        /* --- PURE CSS 3D GLOBE ANIMATION --- */
+        /* --- PURE CSS 3D GLOBE --- */
         .globe-container {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 400px;
-            height: 400px;
-            z-index: 1;
-            perspective: 1000px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative; width: 400px; height: 400px;
+            z-index: 1; perspective: 1000px;
+            display: flex; justify-content: center; align-items: center;
         }
-
         .globe {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
+            width: 300px; height: 300px; border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #3b82f6, #000);
-            box-shadow: 0 0 50px rgba(59, 130, 246, 0.4) inset, 0 0 20px rgba(59, 130, 246, 0.2);
-            position: relative;
-            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.6) inset, 0 0 20px rgba(59, 130, 246, 0.4);
+            position: relative; animation: float 6s ease-in-out infinite;
             overflow: hidden;
         }
-
-        /* Grid lines to make it look technical */
         .globe::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: 
                 linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
                 linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            border-radius: 50%;
+            background-size: 40px 40px; border-radius: 50%;
             animation: spin 20s linear infinite;
         }
-
         .satellite {
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            border: 1px dashed rgba(255,255,255,0.2);
-            border-radius: 50%;
+            position: absolute; width: 450px; height: 450px;
+            border: 1px dashed rgba(255,255,255,0.2); border-radius: 50%;
             animation: spin-reverse 30s linear infinite;
         }
-
         .satellite::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
+            content: ''; position: absolute; top: -5px; left: 50%;
+            width: 10px; height: 10px; background: var(--accent);
+            border-radius: 50%; box-shadow: 0 0 15px var(--accent);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes spin { from { background-position: 0 0; } to { background-position: 100% 0; } }
+        @keyframes spin-reverse { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 
-        @keyframes spin {
-            from { background-position: 0 0; }
-            to { background-position: 100% 0; }
-        }
-
-        @keyframes spin-reverse {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(-360deg); }
-        }
-
-        /* --- SECTIONS --- */
-        .section {
-            padding: 6rem 5%;
-            position: relative;
-        }
-
-        .section-title {
-            text-align: center;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
-            margin-bottom: 4rem;
-        }
-
-        .section-title span {
-            border-bottom: 3px solid var(--primary);
-        }
-
-        /* --- CARDS --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        /* --- STATS BAR --- */
+        .stats-bar {
+            background: rgba(255,255,255,0.02);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 3rem 5%;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
             gap: 2rem;
+            text-align: center;
         }
+        .stat-item h2 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .stat-item p { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
 
+        /* --- SECTIONS GENERAL --- */
+        .section { padding: 6rem 5%; position: relative; }
+        .section-title {
+            text-align: center; font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem; margin-bottom: 4rem;
+        }
+        .section-title span { border-bottom: 3px solid var(--primary); }
+
+        /* --- MISSION GRID --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .card {
-            background: var(--bg-panel);
-            padding: 2.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
+            background: var(--bg-panel); padding: 2.5rem; border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05); transition: var(--transition);
+            position: relative; overflow: hidden;
         }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 5px;
-            background: var(--primary);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: var(--transition);
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary); transform: scaleX(0); transform-origin: left; transition: var(--transition);
         }
-
         .card:hover::before { transform: scaleX(1); }
-
-        .card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: var(--secondary);
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
+        .card-icon { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--secondary); text-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        .card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
         .card p { color: var(--text-muted); }
 
-        /* --- FOOTER --- */
-        footer {
-            background: black;
-            padding: 3rem 5%;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+        /* --- NEW PROJECTS SECTION (3D TILT) --- */
+        #projects { background: linear-gradient(to top, #06090f, var(--bg-dark)); }
+        
+        .project-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            border: 1px solid rgba(255,255,255,0.05);
         }
+        .project-content { transform: translateZ(20px); }
+        
+        .tag { 
+            font-size: 0.75rem; color: var(--bg-dark); background: var(--secondary); 
+            padding: 4px 12px; border-radius: 12px; font-weight: 700; display: inline-block; margin-bottom: 1rem;
+        }
+        .tag.green { background: var(--primary); }
+        .tag.purple { background: var(--purple); color: white; }
 
-        footer p { color: var(--text-muted); font-size: 0.9rem; }
+        .project-card h3 { font-size: 1.8rem; margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif;}
+        .project-card h4 { font-size: 1rem; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 400; font-style: italic; }
+        
+        .project-link {
+            color: var(--primary); text-decoration: none; font-weight: 700;
+            display: inline-flex; align-items: center; gap: 5px; margin-top: 1rem; transition: 0.3s;
+        }
+        .project-link:hover { gap: 10px; text-shadow: 0 0 10px var(--primary); }
+
+        /* --- FOOTER --- */
+        footer { background: black; padding: 4rem 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
+        footer p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
         footer strong { color: var(--primary); }
 
-        /* --- SCROLL ANIMATION CLASS --- */
-        .hidden { opacity: 0; transform: translateY(50px); transition: all 1s; }
+        /* --- ANIMATION HELPERS --- */
+        .hidden { opacity: 0; transform: translateY(50px); transition: all 0.8s ease-out; }
         .show { opacity: 1; transform: translateY(0); }
 
-        /* --- RESPONSIVE MEDIA QUERIES --- */
+        /* --- RESPONSIVE --- */
         @media screen and (max-width: 900px) {
-            .globe-container { 
-                position: relative; 
-                width: 100%; 
-                height: 300px; 
-                transform: none; 
-                right: 0; 
-                margin-bottom: 2rem;
-            }
+            .globe-container { width: 100%; height: 300px; margin: 2rem 0; }
             .hero { flex-direction: column-reverse; padding-top: 120px; text-align: center; }
             .hero p { border-left: none; padding-left: 0; }
-            .hero-content { margin-top: 2rem; }
+            .stats-bar { flex-direction: column; gap: 3rem; }
         }
-
         @media screen and (max-width: 768px) {
             .nav-links {
-                position: absolute;
-                right: 0px;
-                height: 100vh;
-                top: 0; /* Reset top to cover full screen */
-                background-color: var(--bg-dark);
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center; /* Center items vertically */
-                width: 100%; /* Full width */
-                transform: translateX(100%);
-                transition: transform 0.5s ease-in-out;
-                z-index: 1000; /* Ensure strictly below burger */
+                position: fixed; right: 0; top: 0; height: 100vh; width: 100%;
+                background-color: var(--bg-dark); flex-direction: column;
+                align-items: center; justify-content: center;
+                transform: translateX(100%); transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             }
-            
-            .nav-links.nav-active {
-                transform: translateX(0%);
-            }
-
-            .burger { display: block; position: relative; z-index: 1002; /* Higher than nav-links */ }
-            
+            .nav-links.nav-active { transform: translateX(0%); }
+            .burger { display: block; position: relative; z-index: 1002; }
             .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
     <nav class="navbar">
         <div class="logo">MyGeography <span>Society</span></div>
         <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#mission">Mission</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#home" class="hover-target">Home</a></li>
+            <li><a href="#projects" class="hover-target">Projects</a></li>
+            <li><a href="#mission" class="hover-target">Mission</a></li>
+            <li><a href="#about" class="hover-target">Department</a></li>
         </ul>
-        <div class="burger">
+        <div class="burger hover-target">
             <div class="line1"></div>
             <div class="line2"></div>
             <div class="line3"></div>
@@ -430,9 +355,9 @@
     <section class="hero" id="home">
         <div class="hero-content hidden">
             <div class="badge">Shri Baldeo P.G. College</div>
-            <h1>Exploring Earth.<br><span>Empowering Humanity.</span></h1>
+            <h1>Making the World <br><span class="txt-type" data-wait="3000" data-words='["Sustainable.", "Better.", "Resilient.", "Greener."]'></span></h1>
             <p>Welcome to MyGeography Society. We blend academic rigor with modern technology to map a sustainable future for our world.</p>
-            <a href="#mission" class="btn">Explore Our Work</a>
+            <a href="#projects" class="btn hover-target">Explore Projects</a>
         </div>
         
         <div class="globe-container hidden">
@@ -441,23 +366,71 @@
         </div>
     </section>
 
+    <div class="stats-bar hidden">
+        <div class="stat-item">
+            <h2 class="counter" data-target="50">0</h2>
+            <p>Villages Surveyed</p>
+        </div>
+        <div class="stat-item">
+            <h2 class="counter" data-target="120">0</h2>
+            <p>Research Papers</p>
+        </div>
+        <div class="stat-item">
+            <h2 class="counter" data-target="500">0</h2>
+            <p>Students Impacted</p>
+        </div>
+    </div>
+
     <section class="section" id="mission">
         <h2 class="section-title hidden"><span>Our Impact</span></h2>
         <div class="grid">
-            <div class="card hidden">
+            <div class="card hidden hover-target">
                 <div class="card-icon">🌍</div>
                 <h3>Sustainability</h3>
                 <p>Promoting eco-friendly practices and researching climate resilience to protect our diverse ecosystems.</p>
             </div>
-            <div class="card hidden">
+            <div class="card hidden hover-target">
                 <div class="card-icon">🛰️</div>
                 <h3>Geospatial Tech</h3>
                 <p>Leveraging GIS and Remote Sensing data to solve real-world problems in urban planning and agriculture.</p>
             </div>
-            <div class="card hidden">
+            <div class="card hidden hover-target">
                 <div class="card-icon">🎓</div>
                 <h3>Education</h3>
                 <p>Managed by the Department of Geography, providing seminars, workshops, and field studies for students.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="projects">
+        <h2 class="section-title hidden"><span>Active Research</span></h2>
+        <div class="grid">
+            <div class="project-card hidden hover-target">
+                <div class="project-content">
+                    <span class="tag green">Varanasi</span>
+                    <h3>Urban Sprawl Mapping</h3>
+                    <h4>GIS & Remote Sensing</h4>
+                    <p style="color: #94a3b8; margin-bottom: 1rem;">Analyzing the expansion of built-up areas in the Varanasi district using Landsat data to predict future resource stress.</p>
+                    <a href="#" class="project-link">Read Case Study &rarr;</a>
+                </div>
+            </div>
+            <div class="project-card hidden hover-target">
+                <div class="project-content">
+                    <span class="tag">Regional</span>
+                    <h3>River Health Analysis</h3>
+                    <h4>Environmental Geography</h4>
+                    <p style="color: #94a3b8; margin-bottom: 1rem;">A comprehensive survey of water quality indices along the Ghats, correlating data with seasonal human activity.</p>
+                    <a href="#" class="project-link">View Data &rarr;</a>
+                </div>
+            </div>
+            <div class="project-card hidden hover-target">
+                <div class="project-content">
+                    <span class="tag purple">Social</span>
+                    <h3>Migration Patterns</h3>
+                    <h4>Human Geography</h4>
+                    <p style="color: #94a3b8; margin-bottom: 1rem;">Studying the socio-economic drivers of rural-to-urban migration in Eastern UP through field surveys.</p>
+                    <a href="#" class="project-link">Download Report &rarr;</a>
+                </div>
             </div>
         </div>
     </section>
@@ -469,7 +442,7 @@
                 MyGeography Society is the flagship initiative of the <strong>Department of Geography, Shri Baldeo P.G. College</strong>. 
                 We act as a bridge between academic theory and practical application, striving to make the world a better place through geographical awareness.
             </p>
-            <a href="#" class="btn" style="border-color: var(--secondary); background: transparent; color: var(--secondary);">Join the Society</a>
+            <a href="#" class="btn hover-target" style="border-color: var(--secondary); background: transparent; color: var(--secondary);">Join the Society</a>
         </div>
     </section>
 
@@ -480,20 +453,115 @@
     </footer>
 
     <script>
-        // Burger Menu Logic
+        // --- 1. Custom Cursor Logic ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            // Dot follows instantly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with slight delay (animation in CSS)
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Hover Effect for Cursor
+        const hoverTargets = document.querySelectorAll('.hover-target, a, button');
+        hoverTargets.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+
+        // --- 2. Typewriter Effect ---
+        class TypeWriter {
+            constructor(txtElement, words, wait = 3000) {
+                this.txtElement = txtElement;
+                this.words = words;
+                this.txt = '';
+                this.wordIndex = 0;
+                this.wait = parseInt(wait, 10);
+                this.type();
+                this.isDeleting = false;
+            }
+            type() {
+                const current = this.wordIndex % this.words.length;
+                const fullTxt = this.words[current];
+
+                if(this.isDeleting) {
+                    this.txt = fullTxt.substring(0, this.txt.length - 1);
+                } else {
+                    this.txt = fullTxt.substring(0, this.txt.length + 1);
+                }
+
+                this.txtElement.innerHTML = `<span class="txt">${this.txt}</span>`;
+
+                let typeSpeed = 200;
+                if(this.isDeleting) typeSpeed /= 2;
+
+                if(!this.isDeleting && this.txt === fullTxt) {
+                    typeSpeed = this.wait;
+                    this.isDeleting = true;
+                } else if(this.isDeleting && this.txt === '') {
+                    this.isDeleting = false;
+                    this.wordIndex++;
+                    typeSpeed = 500;
+                }
+
+                setTimeout(() => this.type(), typeSpeed);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', init);
+        function init() {
+            const txtElement = document.querySelector('.txt-type');
+            const words = JSON.parse(txtElement.getAttribute('data-words'));
+            const wait = txtElement.getAttribute('data-wait');
+            new TypeWriter(txtElement, words, wait);
+        }
+
+
+        // --- 3. 3D Tilt Effect for Project Cards ---
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                // Limit rotation to 15 degrees
+                const rotateX = ((y - centerY) / centerY) * -15; 
+                const rotateY = ((x - centerX) / centerX) * 15;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0)`;
+            });
+        });
+
+
+        // --- 4. Burger Menu ---
         const burger = document.querySelector('.burger');
         const nav = document.querySelector('.nav-links');
         const navLinks = document.querySelectorAll('.nav-links li');
 
         burger.addEventListener('click', () => {
-            // Toggle Nav
             nav.classList.toggle('nav-active');
-            
-            // Burger Animation
             burger.classList.toggle('toggle');
         });
 
-        // Close menu when a link is clicked
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
                 nav.classList.remove('nav-active');
@@ -501,17 +569,43 @@
             });
         });
 
-        // Scroll Animation (Intersection Observer)
+
+        // --- 5. Scroll Animations & Counters ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('show');
+                    
+                    // Trigger counters if it's the stats bar
+                    if(entry.target.classList.contains('stats-bar')) {
+                        const counters = document.querySelectorAll('.counter');
+                        counters.forEach(counter => {
+                            const updateCount = () => {
+                                const target = +counter.getAttribute('data-target');
+                                const count = +counter.innerText;
+                                const inc = target / 100; // Speed
+
+                                if(count < target) {
+                                    counter.innerText = Math.ceil(count + inc);
+                                    setTimeout(updateCount, 20);
+                                } else {
+                                    counter.innerText = target + "+";
+                                }
+                            }
+                            updateCount();
+                        });
+                    }
                 }
             });
         });
 
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach((el) => observer.observe(el));
+        
+        // Also observe the stats bar specifically for the counter logic
+        observer.observe(document.querySelector('.stats-bar'));
+
     </script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"302480bf673c49ada431883fc0e9fc56","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
