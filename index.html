@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyGeography Society | Shri Baldeo P.G. College</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #0a0e17;
+            --bg-panel: rgba(255, 255, 255, 0.05);
+            --primary: #4ade80; /* Neon Green */
+            --secondary: #3b82f6; /* Ocean Blue */
+            --accent: #f59e0b; /* Topography Orange */
+            --text-main: #f0fdf4;
+            --text-muted: #94a3b8;
+            --glass: blur(12px) saturate(180%);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 14, 23, 0.7);
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- BURGER MENU --- */
+        .burger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-main);
+            margin: 5px;
+            transition: var(--transition);
+        }
+
+        /* Burger Toggle Animation */
+        .toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); background: var(--primary); }
+        .toggle .line2 { opacity: 0; }
+        .toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); background: var(--primary); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 5%;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.2;
+            border-radius: 50%;
+            top: 20%;
+            left: -10%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            filter: blur(150px);
+            opacity: 0.2;
+            border-radius: 50%;
+            bottom: 10%;
+            right: -10%;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 5px;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid var(--primary);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+        }
+
+        /* --- PURE CSS 3D GLOBE ANIMATION --- */
+        .globe-container {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            z-index: 1;
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .globe {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #3b82f6, #000);
+            box-shadow: 0 0 50px rgba(59, 130, 246, 0.4) inset, 0 0 20px rgba(59, 130, 246, 0.2);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        /* Grid lines to make it look technical */
+        .globe::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        .satellite {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 50%;
+            animation: spin-reverse 30s linear infinite;
+        }
+
+        .satellite::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes spin {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
+
+        @keyframes spin-reverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        /* --- SECTIONS --- */
+        .section {
+            padding: 6rem 5%;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid var(--primary);
+        }
+
+        /* --- CARDS --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-panel);
+            padding: 2.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .card:hover::before { transform: scaleX(1); }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card p { color: var(--text-muted); }
+
+        /* --- FOOTER --- */
+        footer {
+            background: black;
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        footer p { color: var(--text-muted); font-size: 0.9rem; }
+        footer strong { color: var(--primary); }
+
+        /* --- SCROLL ANIMATION CLASS --- */
+        .hidden { opacity: 0; transform: translateY(50px); transition: all 1s; }
+        .show { opacity: 1; transform: translateY(0); }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media screen and (max-width: 900px) {
+            .globe-container { 
+                position: relative; 
+                width: 100%; 
+                height: 300px; 
+                transform: none; 
+                right: 0; 
+                margin-bottom: 2rem;
+            }
+            .hero { flex-direction: column-reverse; padding-top: 120px; text-align: center; }
+            .hero p { border-left: none; padding-left: 0; }
+            .hero-content { margin-top: 2rem; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                right: 0px;
+                height: 100vh;
+                top: 0; /* Reset top to cover full screen */
+                background-color: var(--bg-dark);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center; /* Center items vertically */
+                width: 100%; /* Full width */
+                transform: translateX(100%);
+                transition: transform 0.5s ease-in-out;
+                z-index: 1000; /* Ensure strictly below burger */
+            }
+            
+            .nav-links.nav-active {
+                transform: translateX(0%);
+            }
+
+            .burger { display: block; position: relative; z-index: 1002; /* Higher than nav-links */ }
+            
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">MyGeography <span>Society</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#mission">Mission</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content hidden">
+            <div class="badge">Shri Baldeo P.G. College</div>
+            <h1>Exploring Earth.<br><span>Empowering Humanity.</span></h1>
+            <p>Welcome to MyGeography Society. We blend academic rigor with modern technology to map a sustainable future for our world.</p>
+            <a href="#mission" class="btn">Explore Our Work</a>
+        </div>
+        
+        <div class="globe-container hidden">
+            <div class="satellite"></div>
+            <div class="globe"></div>
+        </div>
+    </section>
+
+    <section class="section" id="mission">
+        <h2 class="section-title hidden"><span>Our Impact</span></h2>
+        <div class="grid">
+            <div class="card hidden">
+                <div class="card-icon">🌍</div>
+                <h3>Sustainability</h3>
+                <p>Promoting eco-friendly practices and researching climate resilience to protect our diverse ecosystems.</p>
+            </div>
+            <div class="card hidden">
+                <div class="card-icon">🛰️</div>
+                <h3>Geospatial Tech</h3>
+                <p>Leveraging GIS and Remote Sensing data to solve real-world problems in urban planning and agriculture.</p>
+            </div>
+            <div class="card hidden">
+                <div class="card-icon">🎓</div>
+                <h3>Education</h3>
+                <p>Managed by the Department of Geography, providing seminars, workshops, and field studies for students.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about" style="background: linear-gradient(to bottom, var(--bg-dark), #0f1c2e);">
+        <div class="hidden" style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <h2 class="section-title"><span>Department Managed</span></h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                MyGeography Society is the flagship initiative of the <strong>Department of Geography, Shri Baldeo P.G. College</strong>. 
+                We act as a bridge between academic theory and practical application, striving to make the world a better place through geographical awareness.
+            </p>
+            <a href="#" class="btn" style="border-color: var(--secondary); background: transparent; color: var(--secondary);">Join the Society</a>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="logo" style="justify-content: center; margin-bottom: 1rem;">MyGeography <span>Society</span></div>
+        <p>&copy; 2026 MyGeography Society. All Rights Reserved.</p>
+        <p>Managed by Department of Geography, <strong>Shri Baldeo P.G. College</strong></p>
+    </footer>
+
+    <script>
+        // Burger Menu Logic
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('.nav-links');
+        const navLinks = document.querySelectorAll('.nav-links li');
+
+        burger.addEventListener('click', () => {
+            // Toggle Nav
+            nav.classList.toggle('nav-active');
+            
+            // Burger Animation
+            burger.classList.toggle('toggle');
+        });
+
+        // Close menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-active');
+                burger.classList.remove('toggle');
+            });
+        });
+
+        // Scroll Animation (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        });
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>
