@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members | MyGeography Society</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- REUSING CORE STYLES --- */
+        :root {
+            --bg-dark: #0a0e17;
+            --primary: #4ade80; 
+            --secondary: #3b82f6; 
+            --glass: blur(12px) saturate(180%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: #fff;
+            background-image: linear-gradient(to bottom, #0a0e17, #111827);
+            min-height: 100vh;
+        }
+
+        /* --- CURSOR --- */
+        .cursor-dot { width: 8px; height: 8px; background: var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid var(--primary); position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; }
+
+        /* --- NAV --- */
+        .navbar {
+            position: fixed; top: 0; width: 100%; padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+            background: rgba(10, 14, 23, 0.8); backdrop-filter: var(--glass);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 3rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: white; text-transform: uppercase; font-size: 0.9rem; }
+        .nav-links a:hover { color: var(--primary); }
+        .burger { display: none; cursor: pointer; }
+        .burger div { width: 25px; height: 3px; background: white; margin: 5px; }
+
+        /* --- MEMBERS CONTENT --- */
+        .header-section {
+            text-align: center;
+            padding: 150px 20px 50px;
+        }
+        .header-section h1 { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; }
+        .header-section span { color: var(--secondary); }
+
+        .team-section {
+            padding: 50px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .role-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .member-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .member-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #333;
+            margin: 0 auto 1.5rem;
+            border: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #666;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Placeholder for Image */
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .member-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .member-role { color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .member-bio { font-size: 0.85rem; color: #aaa; line-height: 1.5; }
+
+        /* Mobile */
+        @media(max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.active { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; height: 100vh; width: 100%; background: var(--bg-dark); justify-content: center; align-items: center; z-index: 999; }
+            .burger { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <nav class="navbar">
+        <div class="logo">MyGeography <span>Society</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="papers.html">Papers</a></li>
+            <li><a href="members.html" style="color: var(--primary);">Members</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+        <div class="burger">
+            <div class="line1"></div><div class="line2"></div><div class="line3"></div>
+        </div>
+    </nav>
+
+    <div class="header-section">
+        <h1>Meet the <span>Team</span></h1>
+        <p style="color: #999; margin-top: 10px;">The minds behind the maps. Managed by Dept. of Geography, Shri Baldeo P.G. College.</p>
+    </div>
+
+    <div class="team-section">
+        <h3 class="role-title">Faculty Advisors</h3>
+        <div class="member-grid">
+            <div class="member-card">
+                <div class="avatar">👨‍🏫</div>
+                <div class="member-name">Dr. [Head of Dept]</div>
+                <div class="member-role">Patron</div>
+                <p class="member-bio">Head of Department, Geography. Guiding the society with 20+ years of academic excellence.</p>
+            </div>
+            <div class="member-card">
+                <div class="avatar">👩‍🏫</div>
+                <div class="member-name">Dr. [Faculty Name]</div>
+                <div class="member-role">Faculty Convener</div>
+                <p class="member-bio">Specialist in Urban Planning and GIS. overseeing research methodologies.</p>
+            </div>
+        </div>
+
+        <h3 class="role-title">Core Committee</h3>
+        <div class="member-grid">
+            <div class="member-card">
+                <div class="avatar">🚀</div>
+                <div class="member-name">[Student Name]</div>
+                <div class="member-role">President</div>
+                <p class="member-bio">Leading the society's initiatives and coordinating field surveys.</p>
+            </div>
+            <div class="member-card">
+                <div class="avatar">💻</div>
+                <div class="member-name">[Student Name]</div>
+                <div class="member-role">Technical Head</div>
+                <p class="member-bio">Managing digital mapping projects and web development.</p>
+            </div>
+            <div class="member-card">
+                <div class="avatar">📝</div>
+                <div class="member-name">[Student Name]</div>
+                <div class="member-role">Research Lead</div>
+                <p class="member-bio">Curating academic papers and organizing seminars.</p>
+            </div>
+            <div class="member-card">
+                <div class="avatar">📣</div>
+                <div class="member-name">[Student Name]</div>
+                <div class="member-role">Outreach</div>
+                <p class="member-bio">Connecting the society with the local community and other institutions.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cursor
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            const x = e.clientX, y = e.clientY;
+            dot.style.left = `${x}px`; dot.style.top = `${y}px`;
+            outline.animate({ left: `${x}px`, top: `${y}px` }, { duration: 500, fill: "forwards" });
+        });
+        // Menu
+        const burger = document.querySelector('.burger');
+        const nav = document.querySelector('.nav-links');
+        burger.addEventListener('click', () => { nav.classList.toggle('active'); });
+    </script>
+</body>
+</html>
